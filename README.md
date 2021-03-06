@@ -1,4 +1,6 @@
 # time-server
+## Description
+date_time_zonespec.csv - база данных часовых поясов.
 ## Using
 Input:
 
