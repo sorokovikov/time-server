@@ -15,8 +15,8 @@ using namespace boost::local_time;
 using namespace boost::posix_time;
 
 
-const int PORT = 8000;
-const int BUFFER_SIZE = 128;
+constexpr int PORT = 8000;
+constexpr int BUFFER_SIZE = 128;
 
 
 std::string removeEscapeCharacters(std::string str) { 
@@ -48,7 +48,7 @@ time_zone_ptr getTimeZonePtr(tz_database tz_db, std::string abbreviation) {
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -99,16 +99,16 @@ int main(int argc, const char** argv) {
 
         time_zone_ptr tz = getTimeZonePtr(tz_db, abbreviation);
         
-        if (tz == NULL) {
-            std::string data = "Abbreviation is not found.\n";
-            send(accept_socket, data.c_str(), data.size(), 0);
-        }
-        else {
+        if (tz) {
             abbreviation = tz->std_zone_abbrev();
             ptime now = second_clock::universal_time();
             local_date_time current_time(now, tz);
 
             std::string data = formatTime(current_time);
+            send(accept_socket, data.c_str(), data.size(), 0);
+        }
+        else {
+            std::string data = "Abbreviation is not found.\n";
             send(accept_socket, data.c_str(), data.size(), 0);
         }
         printf("Send response.\n");
